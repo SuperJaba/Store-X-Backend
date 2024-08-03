@@ -6,4 +6,5 @@ import pl.storex.storex.model.User;
 import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
+    boolean existsUserByEmailAndName(String email, String name);
 }

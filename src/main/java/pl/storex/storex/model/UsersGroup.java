@@ -4,19 +4,19 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
-@Entity
+@Entity(name = "group_of_users")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Family implements Serializable {
+public class UsersGroup implements Serializable {
 
     @Id
-    @Column(name = "family_uuid", nullable = false)
+    @Column(name = "user_group_uuid", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+    private String name;
 
 }
