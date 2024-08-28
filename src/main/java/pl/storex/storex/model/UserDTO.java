@@ -19,9 +19,11 @@ public class UserDTO implements Serializable {
     private String password;
     @Schema(description = "Optional", example = "Optional: '7f9d1b2e-5c79-4e24-8ca1-d180c42c6fee'")
     private String groupUUID;
+    @Schema(description = "Optional", example = "Optional: test@test.com or my group name")
+    private String groupName;
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    public String getGroupId() {
+    private String getGroupId() {
         var group = this.groupUUID;
         if (group == null) {
             group = this.email;

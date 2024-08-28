@@ -18,5 +18,6 @@ public class UsersGroup implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String name;
+    private String groupOwnerEmail;
 
 }
