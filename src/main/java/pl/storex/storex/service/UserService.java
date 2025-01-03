@@ -13,8 +13,8 @@ import java.util.UUID;
 
 @Service
 public class UserService {
-    private UserRepository userRepository;
-    private UsersGroupRepository groupRepository;
+    private final UserRepository userRepository;
+    private final UsersGroupRepository groupRepository;
 
     public UserService(UserRepository userRepository, UsersGroupRepository groupRepository) {
         this.userRepository = userRepository;
@@ -37,9 +37,10 @@ public class UserService {
         } else {
             UsersGroup group = groupRepository.save(UsersGroup.builder()
                     .name(dto.getName())
-                    .groupOwnerEmail(user.getId().toString())
+                    .groupOwnerEmail(user.getEmail())
                     .build()
             );
+
 
             user.setGroup_uuid(group.getId().toString());
         }
@@ -81,7 +82,7 @@ public class UserService {
 
     private String getGroupIdOrCreateNew(String groupId, String groupName, String ownerEmail) {
         UsersGroup usersGroupById = groupRepository.findUsersGroupById(UUID.fromString(groupId));
-        String userGroupId = null;
+        String userGroupId;
         if (usersGroupById != null) {
             userGroupId = usersGroupById.getId().toString();
         } else {
@@ -97,7 +98,7 @@ public class UserService {
     }
 
     public User findByNameAndCheckPass(LoginDTO loginDto) {
-        User userByName = userRepository.findUserByName(loginDto.getEmail());
+        User userByName = userRepository.findUserByEmail(loginDto.getEmail());
         if (userByName != null && Objects.equals(loginDto.getPassword(), userByName.getPassword())) {
             return userByName;
         }

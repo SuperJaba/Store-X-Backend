@@ -1,0 +1,59 @@
+Otwarto wątek. Jedna przeczytana wiadomość.
+
+Przejdź do treści
+Korzystanie z usługi Gmail z czytnikami ekranu
+Włącz powiadomienia na pulpicie dla usługi Gmail.
+   OK  Nie, dziękuję
+5 z 6
+[CT8.PL] Aktywacja konta storex
+Odebrane
+
+Administracja CT8.PL admin@ct8.pl przez mydevil.net
+pon., 4 mar, 23:23
+do mnie
+
+aktywacja konta storex
+Darmowe konto hostingowe na serwerze CT8.pl jest już aktywne. Poniżej znajdują się dane, które będą potrzebne do korzystania z konta.
+
+Login:	storex
+Hasło:	z3k78gkvgdK0nBqw**k3
+Adres serwera SSH/SFTP:	s1.ct8.pl
+Katalog domowy:	/usr/home/storex
+Panel administracyjny DevilWEB: https://panel.ct8.pl/
+
+Poczta e-mail:
+
+Adres SMTP:	s1.ct8.pl (porty: 25, 465 oraz 587)
+Adres IMAP:	s1.ct8.pl (porty: 143 oraz 993)
+Adres POP3:	s1.ct8.pl (porty: 110 oraz 995)
+Webmail (poczta przez WWW):	https://poczta.ct8.pl/
+Adresy serwerów baz danych:
+
+Serwer MySQL:	mysql.ct8.pl
+PhpMyAdmin (zarządzanie bazami MySQL):	https://pma.ct8.pl/
+Serwer PostgreSQL:	pgsql.ct8.pl
+PhpPgAdmin (zarządzanie bazami PostgreSQL):	https://pga.ct8.pl/
+Serwer MongoDB:	mongo.ct8.pl
+RockMongo (zarządzanie bazami MongoDB):	https://moa.ct8.pl/
+Bazy danych należy najpierw utworzyć w panelu DevilWEB lub w systemie zarządzania kontem Devil.
+
+Domeny oraz subdomeny:
+
+Konto udostępnione zostało z darmową subdomeną: http://storex.ct8.pl/.
+W panelu administracyjnym można dodać własne domeny i wydelegować je na nasze serwery DNS oraz uaktywnić darmowe subdomeny w domenie: ct8.pl.
+
+Adresy serwerów DNS:
+
+dns1.ct8.pl
+dns2.ct8.pl
+
+Pomoc:
+
+Dokumentacja hostingu MyDevil.net: https://wiki.mydevil.net/ - sprawdź czy nie ma tam odpowiedzi na Twoje pytanie.
+Pamietaj, że zawsze możesz liczyć na pomoc techniczną na naszym forum: http://forum.ct8.pl.
+Życzymy przyjemnego korzystania z usługi!
+
+--
+Dziękujemy za zaufanie,
+Administracja darmowego hostingu CT8.pl
+

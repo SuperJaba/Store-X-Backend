@@ -39,6 +39,7 @@ public class UsersController {
     // Single user
     @GetMapping("/getUserByID/{id}")
     User user(@PathVariable String id) {
+        //TODO check if user don't exist or throw error
         return repository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException(id));
     }
@@ -54,20 +55,22 @@ public class UsersController {
     }
 
     @PostMapping(value = "/login", produces = "application/json", consumes = "application/json")
-    ResponseEntity<String> login(@RequestBody LoginDTO loginDto) {
-        if (loginDto == null) {
-            return new ResponseEntity<>("Body can't be null", HttpStatus.BAD_REQUEST);
-        }
+    @CrossOrigin(origins = "localhost:52114")
+    ResponseEntity<User> login(@RequestBody LoginDTO loginDto) {
+
         if(loginDto.getEmail() != null && loginDto.getPassword() != null) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Authorization", "token");
             //find user and check pass
             User user = repository.findByNameAndCheckPass(loginDto);
             if (user != null) {
-                return new ResponseEntity<>("User: " + user, headers, HttpStatus.FOUND);
+                return ResponseEntity
+                        .ok()
+                        .headers(headers)
+                        .body(user);
             }
         }
 
-        return new ResponseEntity<>("Wrong login or password", HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.notFound().build();
     }
 }
