@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Entity(name = "group_of_users")
 @Builder
 @AllArgsConstructor

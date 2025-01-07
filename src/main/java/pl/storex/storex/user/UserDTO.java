@@ -1,4 +1,4 @@
-package pl.storex.storex.model;
+package pl.storex.storex.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

@@ -1,10 +1,15 @@
-package pl.storex.storex.service;
+package pl.storex.storex.user;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.storex.storex.model.LoginDTO;
-import pl.storex.storex.model.User;
-import pl.storex.storex.model.UserDTO;
 import pl.storex.storex.model.UsersGroup;
+import pl.storex.storex.service.UsersGroupRepository;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,14 +17,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
     private final UsersGroupRepository groupRepository;
-
-    public UserService(UserRepository userRepository, UsersGroupRepository groupRepository) {
-        this.userRepository = userRepository;
-        this.groupRepository = groupRepository;
-    }
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -29,7 +32,8 @@ public class UserService {
         User user = User.builder()
                 .email(dto.getEmail())
                 .name(dto.getName())
-                .password(dto.getPassword())
+                .role(Role.USER)
+                .password(passwordEncoder.encode(dto.getPassword()))
                 .build();
 
         if (dto.getGroupUUID() != null) {
@@ -63,7 +67,7 @@ public class UserService {
                                 .email(newUser.getPassword())
                                 .group_uuid(getGroupIdOrCreateNew(
                                         newUser.getEmail(),
-                                        (newUser.getGroupName()!= null)? newUser.getGroupName(): null,
+                                        (newUser.getGroupName() != null) ? newUser.getGroupName() : null,
                                         newUser.getEmail()))
                                 .build()));
     }
@@ -98,10 +102,15 @@ public class UserService {
     }
 
     public User findByNameAndCheckPass(LoginDTO loginDto) {
-        User userByName = userRepository.findUserByEmail(loginDto.getEmail());
-        if (userByName != null && Objects.equals(loginDto.getPassword(), userByName.getPassword())) {
-            return userByName;
+        Optional<User> userByName = userRepository.findUserByEmail(loginDto.getEmail());
+        if (userByName.isPresent()) {
+            if (passwordEncoder.matches(loginDto.getPassword(), userByName.get().getPassword())){
+                return userByName.get();
+            }
         }
         return null;
     }
+
+
+
 }

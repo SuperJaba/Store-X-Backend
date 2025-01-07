@@ -3,6 +3,7 @@ package pl.storex.storex.service;
 import org.springframework.data.jpa.repository.JpaRepository;
 import pl.storex.storex.model.UsersGroup;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UsersGroupRepository extends JpaRepository<UsersGroup, UUID> {
@@ -10,4 +11,6 @@ public interface UsersGroupRepository extends JpaRepository<UsersGroup, UUID> {
     UsersGroup findByName(String groupName);
     UsersGroup findUsersGroupById(UUID uuid);
     UsersGroup findUsersGroupByGroupOwnerEmail(String email);
+
+    Optional<UsersGroup> findById(UUID id);
 }

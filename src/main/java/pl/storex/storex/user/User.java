@@ -1,4 +1,4 @@
-package pl.storex.storex.model;
+package pl.storex.storex.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -64,6 +64,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

@@ -1,4 +1,4 @@
-package pl.storex.storex.exceptions;
+package pl.storex.storex.user;
 
 public class UserNotFoundException extends RuntimeException{
 

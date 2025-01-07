@@ -1,26 +1,37 @@
 package pl.storex.storex.controler;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import pl.storex.storex.model.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import pl.storex.storex.model.UsersGroup;
+import pl.storex.storex.model.UsersGroupDTO;
+import pl.storex.storex.user.User;
 import pl.storex.storex.service.UserGroupService;
 
 import java.util.ArrayList;
 
 @Tag(name = "Store-X Group Controller")
-@RestController
+@RestController("group")
+@RequiredArgsConstructor
 public class UserGroupController {
 
-    private final UserGroupService userGroup;
-
-    public UserGroupController(UserGroupService userGroup) {
-        this.userGroup = userGroup;
-    }
+    private final UserGroupService userGroupService;
 
     public ArrayList<User> getAllUsersInGroup(@RequestBody String body) {
-
         return null;
     }
+
+    @PostMapping(value = "/update", consumes = "application/json")
+    ResponseEntity<UsersGroup> updateGroupName(@RequestBody UsersGroupDTO usersGroupDto) {
+        return ResponseEntity.ok(userGroupService.updateGroup(usersGroupDto));
+    }
+
+    @DeleteMapping("/removeGroup")
+    ResponseEntity.BodyBuilder removeGroup(@RequestBody String groupId) {
+        userGroupService.removeGroup(groupId);
+        return ResponseEntity.ok();
+    }
+
 }
