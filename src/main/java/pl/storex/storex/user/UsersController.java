@@ -42,17 +42,15 @@ public class UsersController {
                 .build());
     }
 
-    // Single user
     @GetMapping("/getUserByID/{id}")
     User user(@PathVariable String id) {
-        //TODO check if user don't exist or throw error
         return repository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @PostMapping(value = "/groupUsers")
     ResponseEntity<ArrayList<User>> getUsersInGroup(@RequestBody String groupOwnerEmail) {
-        return ResponseEntity.ok(userGroupService.usersInGroup(groupOwnerEmail));
+        return ResponseEntity.ok(repository.usersInGroup(groupOwnerEmail));
     }
 
     @PutMapping(value = "/updateUser/{id}", consumes = "application/json", produces = "application/json")

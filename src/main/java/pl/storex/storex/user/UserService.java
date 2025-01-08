@@ -1,20 +1,13 @@
 package pl.storex.storex.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.storex.storex.model.LoginDTO;
 import pl.storex.storex.model.UsersGroup;
 import pl.storex.storex.service.UsersGroupRepository;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -44,8 +37,6 @@ public class UserService {
                     .groupOwnerEmail(user.getEmail())
                     .build()
             );
-
-
             user.setGroup_uuid(group.getId().toString());
         }
         return userRepository.save(user);
@@ -104,13 +95,20 @@ public class UserService {
     public User findByNameAndCheckPass(LoginDTO loginDto) {
         Optional<User> userByName = userRepository.findUserByEmail(loginDto.getEmail());
         if (userByName.isPresent()) {
-            if (passwordEncoder.matches(loginDto.getPassword(), userByName.get().getPassword())){
+            if (passwordEncoder.matches(loginDto.getPassword(), userByName.get().getPassword())) {
                 return userByName.get();
             }
         }
         return null;
     }
 
-
+    public ArrayList<User> usersInGroup(String ownerEmail) {
+        Optional<UsersGroup> usersGroup = groupRepository.findByGroupOwnerEmail(ownerEmail);
+        Optional<ArrayList<User>> users = Optional.empty();
+        if (usersGroup.isPresent()) {
+            users = userRepository.findUsersByGroupId(usersGroup.get().getId().toString());
+        }
+        return users.orElseThrow(() -> new UserNotFoundException("No Users to return"));
+    }
 
 }

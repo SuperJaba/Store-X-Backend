@@ -1,16 +1,16 @@
 package pl.storex.storex.controler;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.storex.storex.model.UsersGroup;
 import pl.storex.storex.model.UsersGroupDTO;
-import pl.storex.storex.user.User;
 import pl.storex.storex.service.UserGroupService;
+import pl.storex.storex.user.UserDTO;
 
-import java.util.ArrayList;
+import java.util.Optional;
 
 @Tag(name = "Store-X Group Controller")
 @RestController("group")
@@ -19,8 +19,10 @@ public class UserGroupController {
 
     private final UserGroupService userGroupService;
 
-    public ArrayList<User> getAllUsersInGroup(@RequestBody String body) {
-        return null;
+    @PostMapping("/removeUser")
+    ResponseEntity.BodyBuilder removeUserFromGroup(@RequestBody String userId) {
+        userGroupService.removeUserFromGroup(userId);
+        return ResponseEntity.ok();
     }
 
     @PostMapping(value = "/update", consumes = "application/json")
@@ -32,6 +34,18 @@ public class UserGroupController {
     ResponseEntity.BodyBuilder removeGroup(@RequestBody String groupId) {
         userGroupService.removeGroup(groupId);
         return ResponseEntity.ok();
+    }
+
+    @Operation(summary = "Search group by any field")
+    @PostMapping("/findGroup")
+    ResponseEntity<UsersGroup> findGroup(@RequestBody UsersGroupDTO groupDTO) {
+        Optional<UsersGroup> usersGroup = userGroupService.findGroup(groupDTO);
+        return ResponseEntity.of(usersGroup);
+    }
+
+    @PostMapping("/addUser")
+    ResponseEntity<UserDTO> addGroupToUser(@RequestBody UserDTO userDTO) {
+       return ResponseEntity.ok(userGroupService.findUsersWithoutGroup(userDTO));
     }
 
 }

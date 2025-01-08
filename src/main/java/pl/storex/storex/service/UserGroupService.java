@@ -1,32 +1,22 @@
 package pl.storex.storex.service;
 
 import jakarta.persistence.NonUniqueResultException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.storex.storex.model.UsersGroupDTO;
 import pl.storex.storex.user.User;
 import pl.storex.storex.model.UsersGroup;
-import pl.storex.storex.user.UserNotFoundException;
+import pl.storex.storex.user.UserDTO;
 import pl.storex.storex.user.UserRepository;
 
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class UserGroupService {
     private final UsersGroupRepository groupRepo;
     private final UserRepository user;
-
-    public UserGroupService(UsersGroupRepository userGroup, UserRepository user) {
-        this.groupRepo = userGroup;
-        this.user = user;
-    }
-
-    public ArrayList<User> usersInGroup(String ownerEmail) {
-        UsersGroup usersGroupByGroupOwnerEmail = groupRepo.findUsersGroupByGroupOwnerEmail(ownerEmail);
-        Optional<ArrayList<User>> users = user.findUsersByGroup_uuid(usersGroupByGroupOwnerEmail.getId());
-        return users.orElseThrow(() -> new UserNotFoundException("No Users to return"));
-    }
 
     public UsersGroup getGroupByUUID(String uuid) {
         Optional<UsersGroup> group = groupRepo.findById(UUID.fromString(uuid));
@@ -65,7 +55,34 @@ public class UserGroupService {
         group.ifPresent(groupRepo::delete);
     }
 
-    public void removeUserFromGroup(String groupId, String userId) {
+    public void removeUserFromGroup(String userId) {
+        Optional<User> optionalUser = user.findById(UUID.fromString(userId));
+        if (optionalUser.isPresent()) {
+            User user1 = optionalUser.get();
+            user.save(user1);
+        }
+    }
 
+    public Optional<UsersGroup> findGroup(UsersGroupDTO groupDTO) {
+        Optional<UsersGroup> group = Optional.empty();
+        if (groupDTO.getGroupId() != null) {
+            group = groupRepo.findById(UUID.fromString(groupDTO.getGroupId()));
+        }
+        if (groupDTO.getName() != null) {
+            group = Optional.ofNullable(groupRepo.findByName(groupDTO.getName()));
+        }
+        if (groupDTO.getOwnerId() != null) {
+            group = groupRepo.findByGroupOwnerEmail(groupDTO.getOwnerId());
+        }
+        return group;
+    }
+
+     public UserDTO findUsersWithoutGroup(UserDTO userDTO) {
+         Optional<User> optionalUser = user.findUserByEmail(userDTO.getEmail());
+         UserDTO dto = null;
+         if (optionalUser.isPresent()) {
+             dto = User.toDTO(optionalUser.get());
+         }
+         return dto;
     }
 }

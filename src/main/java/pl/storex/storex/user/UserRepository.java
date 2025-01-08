@@ -17,6 +17,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findUserByEmail(@Param("email") String email);
 
     @Query("select u from appuser u where u.group_uuid = :groupId ")
-    Optional<ArrayList<User>> findUsersByGroup_uuid(@Param("groupId") UUID id);
+    Optional<ArrayList<User>> findUsersByGroupId(@Param("groupId") String id);
 
 }

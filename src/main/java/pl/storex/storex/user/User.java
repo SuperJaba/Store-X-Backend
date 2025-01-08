@@ -66,4 +66,21 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public static UserDTO toDTO(User user) {
+        return UserDTO.builder()
+                .groupUUID(user.group_uuid)
+                .name(user.name)
+                .groupName(user.email)
+                .email(user.email)
+                .build();
+    }
+
+    public static User toUser(UserDTO userDTO) {
+        return User.builder()
+                .name(userDTO.getName())
+                .email(userDTO.getEmail())
+                .group_uuid(userDTO.getGroupUUID())
+                .build();
+    }
 }
