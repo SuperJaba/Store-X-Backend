@@ -1,7 +1,7 @@
-package pl.storex.storex.service;
+package pl.storex.storex.group.service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pl.storex.storex.model.UsersGroup;
+import pl.storex.storex.group.model.UsersGroup;
 
 import java.util.Optional;
 import java.util.UUID;

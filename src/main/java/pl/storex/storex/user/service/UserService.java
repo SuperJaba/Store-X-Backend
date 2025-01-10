@@ -1,11 +1,15 @@
-package pl.storex.storex.user;
+package pl.storex.storex.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.storex.storex.model.LoginDTO;
-import pl.storex.storex.model.UsersGroup;
-import pl.storex.storex.service.UsersGroupRepository;
+import pl.storex.storex.group.model.UsersGroup;
+import pl.storex.storex.group.service.UsersGroupRepository;
+import pl.storex.storex.user.exception.UserNotFoundException;
+import pl.storex.storex.user.model.Role;
+import pl.storex.storex.user.model.User;
+import pl.storex.storex.user.model.UserDTO;
 
 import java.util.ArrayList;
 import java.util.List;

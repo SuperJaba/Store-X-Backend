@@ -8,7 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import pl.storex.storex.user.UserRepository;
+import pl.storex.storex.user.service.UserRepository;
 
 @Configuration
 @RequiredArgsConstructor

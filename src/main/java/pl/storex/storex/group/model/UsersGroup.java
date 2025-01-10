@@ -1,4 +1,4 @@
-package pl.storex.storex.model;
+package pl.storex.storex.group.model;
 
 import jakarta.persistence.*;
 import lombok.*;

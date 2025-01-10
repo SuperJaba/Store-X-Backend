@@ -1,8 +1,9 @@
-package pl.storex.storex.user;
+package pl.storex.storex.user.service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import pl.storex.storex.user.model.User;
 
 import java.util.ArrayList;
 import java.util.Optional;

@@ -1,14 +1,14 @@
-package pl.storex.storex.controler;
+package pl.storex.storex.group.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.storex.storex.model.UsersGroup;
-import pl.storex.storex.model.UsersGroupDTO;
-import pl.storex.storex.service.UserGroupService;
-import pl.storex.storex.user.UserDTO;
+import pl.storex.storex.group.model.UsersGroup;
+import pl.storex.storex.group.model.UsersGroupDTO;
+import pl.storex.storex.group.service.UserGroupService;
+import pl.storex.storex.user.model.UserDTO;
 
 import java.util.Optional;
 

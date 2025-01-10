@@ -1,4 +1,4 @@
-package pl.storex.storex.user;
+package pl.storex.storex.user.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import pl.storex.storex.model.LoginDTO;
 import pl.storex.storex.model.RequestAuth;
 import pl.storex.storex.security.JwtService;
-import pl.storex.storex.service.UserGroupService;
+import pl.storex.storex.group.service.UserGroupService;
+import pl.storex.storex.user.model.User;
+import pl.storex.storex.user.model.UserDTO;
+import pl.storex.storex.user.exception.UserNotFoundException;
+import pl.storex.storex.user.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;

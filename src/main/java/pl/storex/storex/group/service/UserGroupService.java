@@ -1,13 +1,13 @@
-package pl.storex.storex.service;
+package pl.storex.storex.group.service;
 
 import jakarta.persistence.NonUniqueResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.storex.storex.model.UsersGroupDTO;
-import pl.storex.storex.user.User;
-import pl.storex.storex.model.UsersGroup;
-import pl.storex.storex.user.UserDTO;
-import pl.storex.storex.user.UserRepository;
+import pl.storex.storex.group.model.UsersGroupDTO;
+import pl.storex.storex.user.model.User;
+import pl.storex.storex.group.model.UsersGroup;
+import pl.storex.storex.user.model.UserDTO;
+import pl.storex.storex.user.service.UserRepository;
 
 import java.util.Optional;
 import java.util.UUID;

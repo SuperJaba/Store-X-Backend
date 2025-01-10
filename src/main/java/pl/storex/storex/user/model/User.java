@@ -1,4 +1,4 @@
-package pl.storex.storex.user;
+package pl.storex.storex.user.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
