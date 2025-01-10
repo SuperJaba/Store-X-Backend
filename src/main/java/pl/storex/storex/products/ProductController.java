@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RestController("/products")
 @RequiredArgsConstructor
-@Tag(name = "Product Controller")
+@Tag(name = "Store-X Product Controller")
 public class ProductController {
     private final ProductService productService;
 
