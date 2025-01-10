@@ -31,7 +31,8 @@ public class WebSecurityConfig {
     private static final String[] WHITELIST = {
             "users/login", "/h2-console/**", "webjars/**", "auth/csrf",
             "swagger-ui/**", "/swagger-ui/**", "swagger-ui**", "/v3/api-docs/**",
-            "/v3/api-docs**", "/api-docs/**", "users/addUser", "/users/addUser"
+            "/v3/api-docs**", "/api-docs/**", "users/addUser", "/users/addUser",
+            "users/register"
     };
 
     @Bean

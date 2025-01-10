@@ -7,7 +7,10 @@ import pl.storex.storex.model.LoginDTO;
 import pl.storex.storex.model.UsersGroup;
 import pl.storex.storex.service.UsersGroupRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -111,4 +114,15 @@ public class UserService {
         return users.orElseThrow(() -> new UserNotFoundException("No Users to return"));
     }
 
+    public UserDTO register(UserDTO userDTO) {
+        User user = User.toUser(userDTO);
+        user.setRole(Role.USER);
+        return User.toDTO(userRepository.save(user));
+    }
+
+    public UserDTO registerAdmin(UserDTO userDTO) {
+        User user = User.toUser(userDTO);
+        user.setRole(Role.ADMIN);
+        return User.toDTO(userRepository.save(user));
+    }
 }

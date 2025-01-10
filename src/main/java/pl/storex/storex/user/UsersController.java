@@ -1,10 +1,8 @@
 package pl.storex.storex.user;
 
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.storex.storex.model.LoginDTO;
@@ -28,6 +26,11 @@ public class UsersController {
     @GetMapping("/getAll")
     List<User> allUsers() {
         return repository.findAll();
+    }
+
+    @PostMapping("/register")
+    ResponseEntity<UserDTO> registerWithoutGroup(@RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(repository.register(userDTO));
     }
 
     @PostMapping(value = "/addUser", produces = "application/json", consumes = "application/json")
@@ -79,7 +82,13 @@ public class UsersController {
                                 .build());
             }
         }
-
         return ResponseEntity.notFound().build();
     }
+
+    @Operation(summary = "Register user with Admin role")
+    @PostMapping("/register/admin")
+    ResponseEntity<UserDTO> registerAdmin(@RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(repository.registerAdmin(userDTO));
+    }
+
 }
