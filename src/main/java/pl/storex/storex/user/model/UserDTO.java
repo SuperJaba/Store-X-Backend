@@ -11,6 +11,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class UserDTO implements Serializable {
+
+    private Long id;
     @Schema(example = "test@test.com")
     private String email;
     @Schema(example = "Janusz")
@@ -21,6 +23,7 @@ public class UserDTO implements Serializable {
     private Long groupId;
     @Schema(description = "Optional", example = "Optional: test@test.com or my group name")
     private String groupName;
+    private Role role;
 /*
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private int getGroupId() {

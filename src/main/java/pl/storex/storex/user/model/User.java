@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Entity(name = "appuser")
@@ -19,6 +20,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "id", unique = true)
@@ -32,6 +35,32 @@ public class User implements UserDetails {
     private Date created_at;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+
+    public UserDTO toDTO() {
+        return UserDTO.builder()
+                .id(this.id)
+                .name(this.name)
+                .password(this.password)
+                .email(this.email)
+                .role(this.role)
+//                .role(this.role.stream().map(Role::toDTO).collect(Collectors.toSet())) // INTERESTING
+                .groupId(this.group_id)
+                .build();
+    }
+
+    public static User fromDTO(UserDTO userDTO) {
+        return User.builder()
+                .id(userDTO.getId())
+                .name(userDTO.getName())
+                .password(userDTO.getPassword())
+                .email(userDTO.getEmail())
+                .role(userDTO.getRole())
+                .group_id(userDTO.getGroupId())
+                .build();
+    }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

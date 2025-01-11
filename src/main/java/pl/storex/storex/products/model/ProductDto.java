@@ -4,14 +4,15 @@ package pl.storex.storex.products.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@RequiredArgsConstructor
+
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProductDto implements Serializable {
 
     private Long id;

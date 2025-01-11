@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
+
+import java.io.Serializable;
 
 @Entity
 @Table(name = "products")
@@ -12,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,20 +23,22 @@ public class Product {
     private Long category_id;
     private String barcode;
 
-    public ProductDto toDTO() {
-        return ProductDto.builder()
-                .name(this.name)
-                .category_id(this.category_id)
-                .name(this.name)
+    public static Product fromDTOtoModel(ProductDto productDto) {
+        Product product = Product.builder()
+                .name(productDto.getName())
+                .category_id(productDto.getCategory_id())
+                .barcode(productDto.getBarcode())
                 .build();
+        if(productDto.getId() != null) product.setId(productDto.getId());
+        return product;
     }
 
-    public static Product fromDTO(ProductDto productDto) {
-        return Product.builder()
-                .id(productDto.getId())
-                .name(productDto.getName())
-                .name(productDto.getName())
-                .barcode(productDto.getBarcode())
+    public ProductDto toDTOFromModel(Product product) {
+        return ProductDto.builder()
+                .id(product.getId())
+                .category_id(product.getCategory_id())
+                .barcode(product.getBarcode())
+                .name(product.getName())
                 .build();
     }
 

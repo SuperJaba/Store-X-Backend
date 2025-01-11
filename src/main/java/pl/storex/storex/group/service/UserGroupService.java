@@ -10,7 +10,6 @@ import pl.storex.storex.user.model.UserDTO;
 import pl.storex.storex.user.service.UserRepository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,11 +24,11 @@ public class UserGroupService {
 
 
     public UsersGroup updateGroup(UsersGroupDTO usersGroupDTO) {
-        Optional<UsersGroup> groupById = groupRepo.findById(usersGroupDTO.getGroupId());
+        Optional<UsersGroup> groupById = groupRepo.findById(usersGroupDTO.getId());
         Optional<User> owner = user.findUserByEmail(groupById.get().getGroupOwnerEmail());
         User userObj;
         userObj = owner.orElse(null);
-        return groupRepo.findById(usersGroupDTO.getGroupId()).map(
+        return groupRepo.findById(usersGroupDTO.getId()).map(
                 group -> {
                     group.setName(usersGroupDTO.getName());
                     assert userObj != null;
@@ -66,8 +65,8 @@ public class UserGroupService {
 
     public Optional<UsersGroup> findGroup(UsersGroupDTO groupDTO) {
         Optional<UsersGroup> group = Optional.empty();
-        if (groupDTO.getGroupId() != null) {
-            group = groupRepo.findById(groupDTO.getGroupId());
+        if (groupDTO.getId() != null) {
+            group = groupRepo.findById(groupDTO.getId());
         }
         if (groupDTO.getName() != null) {
             group = Optional.ofNullable(groupRepo.findByName(groupDTO.getName()));

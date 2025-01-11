@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
@@ -22,5 +23,8 @@ public class UsersGroup implements Serializable {
     private String name;
     @Column(name = "group_owner_email")
     private String groupOwnerEmail;
+    private Date created_at;
+    private Date updated_at;
+    private Long updated_by;
 
 }

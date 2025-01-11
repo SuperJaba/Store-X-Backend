@@ -2,12 +2,14 @@ package pl.storex.storex.products;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.storex.storex.products.model.Product;
 import pl.storex.storex.products.model.ProductDto;
 import pl.storex.storex.products.service.ProductService;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +33,17 @@ public class ProductController {
     @PostMapping("/add")
     ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto productDto) {
         return ResponseEntity.ok(productService.save(productDto));
+    }
+
+    @DeleteMapping("/removeProduct")
+    ResponseEntity<HttpStatus> removeProduct(@RequestBody ProductDto productDto) {
+        productService.removeProduct(productDto);
+        return ResponseEntity.ok(HttpStatus.ACCEPTED);
+    }
+
+    @PutMapping("/update")
+    ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto) throws SQLIntegrityConstraintViolationException {
+        return ResponseEntity.ok(productService.updateProduct(productDto));
     }
 
 }
