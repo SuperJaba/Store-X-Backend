@@ -3,6 +3,7 @@ package pl.storex.storex.user.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
@@ -11,6 +12,9 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class UserDTO implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     @Schema(example = "test@test.com")
