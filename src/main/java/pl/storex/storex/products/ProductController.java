@@ -9,7 +9,6 @@ import pl.storex.storex.products.model.Product;
 import pl.storex.storex.products.model.ProductDto;
 import pl.storex.storex.products.service.ProductService;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,14 +45,17 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateProduct(productDto));
     }
 
-    @GetMapping("/get/${barcode}")
-    ResponseEntity<ProductDto> getProductByBarcode(@PathVariable String barcode) {
-        return ResponseEntity.ok(new Product().toDTOFromModel(productService.findByBarcode(barcode)));
+    @PostMapping("/getByDTOBarcode")
+    ResponseEntity<ProductDto> getProductByBarcode(@RequestBody ProductDto productDto) {
+        return ResponseEntity.ok(new Product()
+                .toDTOFromModel(productService.findByBarcode(
+                        productDto.getBarcode()
+                )));
     }
 
-    @GetMapping("/get/${category_id}")
-    ResponseEntity<List<ProductDto>> getProductByCategoryId(@PathVariable Long category_id) {
-        return ResponseEntity.ok(productService.findByCategoryId(category_id));
+    @PostMapping("/getByDTOCategoryId")
+    ResponseEntity<List<ProductDto>> getProductByCategoryId(@RequestBody ProductDto dto) {
+        return ResponseEntity.ok(productService.findByCategoryId(dto));
     }
 
 }

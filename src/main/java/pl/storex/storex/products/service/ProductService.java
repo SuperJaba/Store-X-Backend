@@ -1,11 +1,6 @@
 package pl.storex.storex.products.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
 import org.springframework.stereotype.Service;
 import pl.storex.storex.products.model.Product;
 import pl.storex.storex.products.model.ProductDto;
@@ -16,7 +11,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-//@Log4j2
 public class ProductService {
 
 //    private static final Logger logger = LoggerFactory.getLogger("Slf4j");
@@ -69,19 +63,22 @@ public class ProductService {
         optionalProduct.stream().map(product -> {
             product.setBarcode(productDto.getBarcode());
             product.setName(productDto.getName());
-            product.setCategory_id(productDto.getCategory_id());
+            product.setCategoryId(productDto.getCategoryId());
             return new Product().toDTOFromModel(productRepository.save(product));
         });
         return null;
     }
 
 
-    public List<ProductDto> findByCategoryId(Long categoryId) {
-        List<Product> byCategoryId = productRepository.findByCategory_id(categoryId);
-        List<ProductDto> productDtoArrayList = new ArrayList<>();
-        for (Product product : byCategoryId) {
-            productDtoArrayList.add(new Product().toDTOFromModel(product));
+    public List<ProductDto> findByCategoryId(ProductDto dto) {
+        Optional<List<Product>> byCategoryId = productRepository.getAllByCategoryId(dto.getCategoryId());
+        if (byCategoryId.isPresent()) {
+            List<ProductDto> productDtoArrayList = new ArrayList<>();
+            for (Product product : byCategoryId.get()) {
+                productDtoArrayList.add(new Product().toDTOFromModel(product));
+            }
+            return productDtoArrayList;
         }
-        return productDtoArrayList;
+        return null;
     }
 }
