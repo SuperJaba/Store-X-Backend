@@ -18,17 +18,18 @@ public class UserGroupService {
     private final UsersGroupRepository groupRepo;
     private final UserRepository user;
 
-    public UsersGroup getGroupByUUID(String uuid) {
-        Optional<UsersGroup> group = groupRepo.findById(UUID.fromString(uuid));
+    public UsersGroup getGroupById(Long id) {
+        Optional<UsersGroup> group = groupRepo.findById(id);
         return group.orElseThrow(() -> new NullPointerException("Group was not found"));
     }
 
 
     public UsersGroup updateGroup(UsersGroupDTO usersGroupDTO) {
-        Optional<User> owner = user.findById(UUID.fromString(usersGroupDTO.getOwnerId()));
+        Optional<UsersGroup> groupById = groupRepo.findById(usersGroupDTO.getGroupId());
+        Optional<User> owner = user.findUserByEmail(groupById.get().getGroupOwnerEmail());
         User userObj;
         userObj = owner.orElse(null);
-        return groupRepo.findById(UUID.fromString(usersGroupDTO.getGroupId())).map(
+        return groupRepo.findById(usersGroupDTO.getGroupId()).map(
                 group -> {
                     group.setName(usersGroupDTO.getName());
                     assert userObj != null;
@@ -45,18 +46,18 @@ public class UserGroupService {
         );
     }
 
-    UsersGroup findGroup(String groupId) {
-        return groupRepo.findById(UUID.fromString(groupId)).orElseThrow(
+    UsersGroup findGroup(Long groupId) {
+        return groupRepo.findById(groupId).orElseThrow(
                 ()-> new NonUniqueResultException("Group not found"));
     }
 
-    public void removeGroup(String groupId) {
+    public void removeGroup(Long groupId) {
         Optional<UsersGroup> group = Optional.ofNullable(findGroup(groupId));
         group.ifPresent(groupRepo::delete);
     }
 
-    public void removeUserFromGroup(String userId) {
-        Optional<User> optionalUser = user.findById(UUID.fromString(userId));
+    public void removeUserFromGroup(Long userId) {
+        Optional<User> optionalUser = user.findById(userId);
         if (optionalUser.isPresent()) {
             User user1 = optionalUser.get();
             user.save(user1);
@@ -66,13 +67,13 @@ public class UserGroupService {
     public Optional<UsersGroup> findGroup(UsersGroupDTO groupDTO) {
         Optional<UsersGroup> group = Optional.empty();
         if (groupDTO.getGroupId() != null) {
-            group = groupRepo.findById(UUID.fromString(groupDTO.getGroupId()));
+            group = groupRepo.findById(groupDTO.getGroupId());
         }
         if (groupDTO.getName() != null) {
             group = Optional.ofNullable(groupRepo.findByName(groupDTO.getName()));
         }
-        if (groupDTO.getOwnerId() != null) {
-            group = groupRepo.findByGroupOwnerEmail(groupDTO.getOwnerId());
+        if (groupDTO.getGroup_owner_email() != null) {
+            group = groupRepo.findByGroupOwnerEmail(groupDTO.getGroup_owner_email());
         }
         return group;
     }

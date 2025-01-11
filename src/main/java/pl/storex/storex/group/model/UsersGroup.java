@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.UUID;
 
 @Getter
@@ -15,10 +16,11 @@ import java.util.UUID;
 public class UsersGroup implements Serializable {
 
     @Id
-    @Column(name = "user_group_uuid", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
+    @Column(name = "group_owner_email")
     private String groupOwnerEmail;
 
 }

@@ -14,10 +14,27 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
-    private String category_id;
+    private Long category_id;
     private String barcode;
+
+    public ProductDto toDTO() {
+        return ProductDto.builder()
+                .name(this.name)
+                .category_id(this.category_id)
+                .name(this.name)
+                .build();
+    }
+
+    public static Product fromDTO(ProductDto productDto) {
+        return Product.builder()
+                .id(productDto.getId())
+                .name(productDto.getName())
+                .name(productDto.getName())
+                .barcode(productDto.getBarcode())
+                .build();
+    }
 
 }

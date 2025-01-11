@@ -9,9 +9,9 @@ import java.io.Serializable;
 @Data
 @Builder
 public class UsersGroupDTO implements Serializable {
-    private String groupId;
-    private String name;
-    private String ownerId;
 
-    
+    private Long groupId;
+    private String name;
+    private String group_owner_email;
+
 }

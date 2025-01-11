@@ -20,7 +20,7 @@ public class UserGroupController {
     private final UserGroupService userGroupService;
 
     @PostMapping("/removeUser")
-    ResponseEntity.BodyBuilder removeUserFromGroup(@RequestBody String userId) {
+    ResponseEntity.BodyBuilder removeUserFromGroup(@RequestBody Long userId) {
         userGroupService.removeUserFromGroup(userId);
         return ResponseEntity.ok();
     }
@@ -31,7 +31,7 @@ public class UserGroupController {
     }
 
     @DeleteMapping("/removeGroup")
-    ResponseEntity.BodyBuilder removeGroup(@RequestBody String groupId) {
+    ResponseEntity.BodyBuilder removeGroup(@RequestBody Long groupId) {
         userGroupService.removeGroup(groupId);
         return ResponseEntity.ok();
     }
