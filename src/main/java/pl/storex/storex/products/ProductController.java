@@ -42,8 +42,18 @@ public class ProductController {
     }
 
     @PutMapping("/update")
-    ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto) throws SQLIntegrityConstraintViolationException {
+    ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto) {
         return ResponseEntity.ok(productService.updateProduct(productDto));
+    }
+
+    @GetMapping("/get/${barcode}")
+    ResponseEntity<ProductDto> getProductByBarcode(@PathVariable String barcode) {
+        return ResponseEntity.ok(new Product().toDTOFromModel(productService.findByBarcode(barcode)));
+    }
+
+    @GetMapping("/get/${category_id}")
+    ResponseEntity<List<ProductDto>> getProductByCategoryId(@PathVariable Long category_id) {
+        return ResponseEntity.ok(productService.findByCategoryId(category_id));
     }
 
 }

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Entity(name = "group_of_users")
+@Entity(name = "users_groups")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
