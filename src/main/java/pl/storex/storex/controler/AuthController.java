@@ -8,7 +8,6 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 import pl.storex.storex.model.LoginDTO;
 import pl.storex.storex.model.RequestAuth;
-import pl.storex.storex.user.UserDTO;
 
 @RestController
 @RequestMapping("/auth")

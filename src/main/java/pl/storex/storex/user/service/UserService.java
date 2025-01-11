@@ -1,16 +1,19 @@
-package pl.storex.storex.user;
+package pl.storex.storex.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.storex.storex.model.LoginDTO;
-import pl.storex.storex.model.UsersGroup;
-import pl.storex.storex.service.UsersGroupRepository;
+import pl.storex.storex.group.model.UsersGroup;
+import pl.storex.storex.group.service.UsersGroupRepository;
+import pl.storex.storex.user.exception.UserNotFoundException;
+import pl.storex.storex.user.model.Role;
+import pl.storex.storex.user.model.User;
+import pl.storex.storex.user.model.UserDTO;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,26 +35,26 @@ public class UserService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .build();
 
-        if (dto.getGroupUUID() != null) {
-            user.setGroup_uuid(getGroupIdOrCreateNew(dto.getGroupUUID(), dto.getGroupName(), dto.getName()));
+        if (dto.getGroupId() != null) {
+            user.setGroup_id(getGroupIdOrCreateNew(dto.getGroupId(), dto.getGroupName(), dto.getName()));
         } else {
             UsersGroup group = groupRepository.save(UsersGroup.builder()
                     .name(dto.getName())
                     .groupOwnerEmail(user.getEmail())
                     .build()
             );
-            user.setGroup_uuid(group.getId().toString());
+            user.setGroup_id(group.getId());
         }
         return userRepository.save(user);
     }
 
-    public User update(UserDTO newUser, String id) {
-        return userRepository.findById(UUID.fromString(id))
+    public User update(UserDTO newUser, Long id) {
+        return userRepository.findById(id)
                 .map(user -> {
                     user.setName(newUser.getName());
                     user.setEmail(newUser.getEmail());
                     user.setPassword(newUser.getPassword());
-                    user.setGroup_uuid(newUser.getGroupUUID());
+                    user.setGroup_id(newUser.getGroupId());
                     return userRepository.save(user);
                 })
                 .orElseGet(() -> userRepository.save(
@@ -59,30 +62,30 @@ public class UserService {
                                 .name(newUser.getName())
                                 .password(newUser.getPassword())
                                 .email(newUser.getPassword())
-                                .group_uuid(getGroupIdOrCreateNew(
-                                        newUser.getEmail(),
+                                .group_id(getGroupIdOrCreateNew(
+                                        newUser.getGroupId(),
                                         (newUser.getGroupName() != null) ? newUser.getGroupName() : null,
                                         newUser.getEmail()))
                                 .build()));
     }
 
-    public Optional<User> findById(String id) {
-        return userRepository.findById(UUID.fromString(id));
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
-    public void deleteById(String id) {
-        userRepository.deleteById(UUID.fromString(id));
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 
     public boolean checkIfUserExists(String email, String name) {
         return userRepository.existsUserByEmailAndName(email, name);
     }
 
-    private String getGroupIdOrCreateNew(String groupId, String groupName, String ownerEmail) {
-        UsersGroup usersGroupById = groupRepository.findUsersGroupById(UUID.fromString(groupId));
-        String userGroupId;
+    private Long getGroupIdOrCreateNew(Long groupId, String groupName, String ownerEmail) {
+        UsersGroup usersGroupById = groupRepository.findUsersGroupById(groupId);
+        Long userGroupId;
         if (usersGroupById != null) {
-            userGroupId = usersGroupById.getId().toString();
+            userGroupId = usersGroupById.getId();
         } else {
             UsersGroup newUserGroup = groupRepository.save(
                     UsersGroup.builder()
@@ -90,7 +93,7 @@ public class UserService {
                             .groupOwnerEmail(ownerEmail)
                             .build()
             );
-            userGroupId = newUserGroup.getId().toString();
+            userGroupId = newUserGroup.getId();
         }
         return userGroupId;
     }
@@ -109,7 +112,7 @@ public class UserService {
         Optional<UsersGroup> usersGroup = groupRepository.findByGroupOwnerEmail(ownerEmail);
         Optional<ArrayList<User>> users = Optional.empty();
         if (usersGroup.isPresent()) {
-            users = userRepository.findUsersByGroupId(usersGroup.get().getId().toString());
+            users = userRepository.findUsersByGroupId(usersGroup.get().getId());
         }
         return users.orElseThrow(() -> new UserNotFoundException("No Users to return"));
     }

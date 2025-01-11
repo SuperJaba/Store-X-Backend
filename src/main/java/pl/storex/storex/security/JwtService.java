@@ -15,12 +15,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import static pl.storex.storex.security.SecurityConstants.SECRET;
+
 
 @Service
 public class JwtService {
 
     private final Instant TOKEN_EXP = Instant.now().plus(2, ChronoUnit.DAYS);
     private final Instant REFRESH_TOKEN_EXP = Instant.now().plus(14, ChronoUnit.DAYS);
+
+    //The JWT signature algorithm we will be using to sign the token
+    SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
 
     public String extractUserName(String token) {
@@ -36,12 +41,13 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, Instant expiration) {
+
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
                 .issuedAt(Date.from(Instant.now()))
                 .expiration(Date.from(expiration))
-                .signWith(getSecretKey())
+                .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -60,7 +66,7 @@ public class JwtService {
     }
 
     private SecretKey getSecretKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SecurityConstants.SECRET);
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

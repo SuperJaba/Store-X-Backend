@@ -1,4 +1,4 @@
-package pl.storex.storex.user;
+package pl.storex.storex.user.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

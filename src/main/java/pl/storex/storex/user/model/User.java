@@ -1,4 +1,4 @@
-package pl.storex.storex.user;
+package pl.storex.storex.user.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,8 +10,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @Entity(name = "appuser")
@@ -20,17 +21,46 @@ import java.util.UUID;
 @NoArgsConstructor
 public class User implements UserDetails {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @Column(name = "user_uuid", unique = true)
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @Column(name = "id", unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     @Column(name = "email", unique = true)
     private String email;
     private String password;
-    private String group_uuid;
+    private Long group_id;
+    private Date created_at;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+
+    public UserDTO toDTO() {
+        return UserDTO.builder()
+                .id(this.id)
+                .name(this.name)
+                .password(this.password)
+                .email(this.email)
+                .role(this.role)
+//                .role(this.role.stream().map(Role::toDTO).collect(Collectors.toSet())) // INTERESTING
+                .groupId(this.group_id)
+                .build();
+    }
+
+    public static User fromDTO(UserDTO userDTO) {
+        return User.builder()
+                .id(userDTO.getId())
+                .name(userDTO.getName())
+                .password(userDTO.getPassword())
+                .email(userDTO.getEmail())
+                .role(userDTO.getRole())
+                .group_id(userDTO.getGroupId())
+                .build();
+    }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -69,7 +99,7 @@ public class User implements UserDetails {
 
     public static UserDTO toDTO(User user) {
         return UserDTO.builder()
-                .groupUUID(user.group_uuid)
+                .groupId(user.group_id)
                 .name(user.name)
                 .groupName(user.email)
                 .email(user.email)
@@ -80,7 +110,7 @@ public class User implements UserDetails {
         return User.builder()
                 .name(userDTO.getName())
                 .email(userDTO.getEmail())
-                .group_uuid(userDTO.getGroupUUID())
+                .group_id(userDTO.getGroupId())
                 .build();
     }
 }

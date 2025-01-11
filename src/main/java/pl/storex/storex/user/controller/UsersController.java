@@ -1,14 +1,19 @@
-package pl.storex.storex.user;
+package pl.storex.storex.user.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.storex.storex.model.LoginDTO;
 import pl.storex.storex.model.RequestAuth;
 import pl.storex.storex.security.JwtService;
-import pl.storex.storex.service.UserGroupService;
+import pl.storex.storex.group.service.UserGroupService;
+import pl.storex.storex.user.model.User;
+import pl.storex.storex.user.model.UserDTO;
+import pl.storex.storex.user.exception.UserNotFoundException;
+import pl.storex.storex.user.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,16 +44,16 @@ public class UsersController {
         return ResponseEntity.ok(UserDTO.builder()
                         .email(newUser.getEmail())
                         .name(newUser.getName())
-                        .groupUUID(newUser.getGroup_uuid())
+                        .groupId(newUser.getGroup_id())
                         .password(newUser.getPassword())
-                        .groupName(userGroupService.getGroupByUUID(newUser.getGroup_uuid()).getName())
+                        .groupName(userGroupService.getGroupById(newUser.getGroup_id()).getName())
                 .build());
     }
 
     @GetMapping("/getUserByID/{id}")
-    User user(@PathVariable String id) {
+    User user(@PathVariable Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException(String.valueOf(id)));
     }
 
     @PostMapping(value = "/groupUsers")
@@ -57,19 +62,20 @@ public class UsersController {
     }
 
     @PutMapping(value = "/updateUser/{id}", consumes = "application/json", produces = "application/json")
-    User updateUser(@RequestBody UserDTO newUser, @PathVariable String id) {
+    User updateUser(@RequestBody UserDTO newUser, @PathVariable Long id) {
         return repository.update(newUser, id);
     }
 
+//    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/removeUser/{id}")
-    void deleteUser(@PathVariable String id) {
+    void deleteUser(@PathVariable Long id) {
         repository.deleteById(id);
     }
 
-    @PostMapping(value = "/login", produces = "application/json", consumes = "application/json")
 //    @CrossOrigin(origins = "localhost:52114")
+    @PostMapping(value = "/login", produces = "application/json", consumes = "application/json")
     ResponseEntity<RequestAuth> login(@RequestBody LoginDTO loginDto) {
-
+        System.out.println(loginDto.getEmail());
         if (loginDto.getEmail() != null && loginDto.getPassword() != null) {
             //find user and check pass
             User user = repository.findByNameAndCheckPass(loginDto);
