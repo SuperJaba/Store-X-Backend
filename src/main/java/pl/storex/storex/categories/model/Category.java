@@ -54,8 +54,4 @@ public class Category implements Serializable {
                 .deleted_at(dto.getDeleted_at())
                 .build();
     }
-
-
-
-
 }
